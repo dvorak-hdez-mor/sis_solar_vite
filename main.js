@@ -27,8 +27,8 @@ camera.position.setZ(30);
 
 // alternativa de agregar cone
 const cone = new THREE.Mesh(
-	new THREE.ConeGeometry(5, 10, 20),
-	new THREE.MeshStandardMaterial({color: 0xffff00})
+	new THREE.ConeGeometry(5, 10, 4),
+	new THREE.MeshStandardMaterial({color: 0xff00ff})
 );
 scene.add(cone);
 
@@ -47,7 +47,7 @@ const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(50, 10);
 scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 
-// agregando controles para camera para moverse en la scene
+// agregando controles de camera para moverse en la scene c/ratón
 const controls = new OrbitControls(camera, renderer.domElement);
 
 // agregando fondo a la scene
@@ -66,8 +66,8 @@ function animate() {
 	cone.rotation.y += 0.01;
 	cone.rotation.z += 0.01;
 
-	step += 0.01;
-	cone.position.x = 15*Math.sin(step);
+	step += 0.1;
+	cone.position.x = 20*Math.sin(step);
 	cone.position.z = 20*Math.cos(step);
 
 	controls.update();
