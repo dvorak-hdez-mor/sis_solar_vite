@@ -17,7 +17,9 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // propiedades de camera
-camera.position.setZ(30);
+camera.position.setZ(25);
+camera.position.setY(25);
+camera.position.setX(25);
 
 // agregando cone
 //const geometry = new THREE.ConeGeometry(5, 10, 10);
@@ -37,7 +39,6 @@ const cube = new THREE.Mesh(
 	new THREE.BoxGeometry(5, 5, 5),
 	new THREE.MeshMatcapMaterial({color: 0x00ff00})
 );
-
 //cube.material.transparent = true;
 //cube.material.opacity = 0.5;
 scene.add(cube);
@@ -48,6 +49,15 @@ const torusKnot = new THREE.Mesh(
 );
 torusKnot.receiveShadow = true;
 scene.add(torusKnot);
+
+const capsule = new THREE.Mesh(
+	new THREE.CapsuleGeometry(2, 5, 2, 8),
+	new THREE.MeshLambertMaterial({color:0xff1906})
+);
+capsule.position.y = 10;
+capsule.position.z = -10;
+capsule.receiveShadow = true;
+scene.add(capsule);
 
 // agregando luz blanca (0xffffff)
 const pointLight = new THREE.PointLight(0xffffff);
@@ -80,15 +90,24 @@ function animate() {
 
 	requestAnimationFrame(animate);
 
-	cone.rotation.x += 0.01;
+	renderer.setSize(window.innerWidth, window.innerHeight);
+
+	cone.rotation.x += 0.1;
 	cone.rotation.y += 0.01;
-	cone.rotation.z += 0.01;
+	cone.rotation.z += 0.1;
+
+	// mover en ciertas condiciones con una func ?
+	camera.position.x = cone.position.x + 5;
+	camera.position.z = cone.position.z + 10;
+	camera.position.y = cone.position.y + 10;
+
+	cube.rotation.y += 0.07;
 
 	stepCone += 0.01;
 	cone.position.x = 30*Math.sin(stepCone);
 	cone.position.z = 30*Math.cos(stepCone);
 
-	stepTorus += 0.07;
+	stepTorus += 0.1;
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
 
