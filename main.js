@@ -87,7 +87,7 @@ const ambientLigth = new THREE.AmbientLight(0xffffff);
 // muestra graficamente el objeto deseado
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(50, 10);
-//scene.add(lightHelper, gridHelper); // agregando helpers a la scene
+scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 
 // agregando controles de camera para moverse en la scene c/ratón
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -102,6 +102,11 @@ scene.background = spaceTexture;
 var stepCone = 0;
 var stepTorus = 0;
 
+function keycontrols(fig){
+	const geometry = fig;
+	
+}
+
 // loop infinito
 function animate() {
 
@@ -114,9 +119,9 @@ function animate() {
 	//cone.rotation.z += 0.1;
 
 	// mover en ciertas condiciones con una func ?
-	camera.position.x = cone.position.x - 10;
-	camera.position.z = cone.position.z - 10;
-	camera.position.y = -5;
+	//camera.position.x = cone.position.x - 10;
+	//camera.position.z = cone.position.z - 10;
+	//camera.position.y = -5;
 	
 	//camera.position.y = cone.position.y + 10;
 
@@ -130,8 +135,32 @@ function animate() {
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
 
+	keycontrols(cone);
+
 	// update de controls
 	controls.update();
+
+	document.onkeydown = function(e){
+		switch(e.keyCode){
+			case 37: // arrow keys 
+				camera.position.x += 1;
+				break;
+			case 38:
+				camera.position.z += 1;
+				break;
+			case 39:
+				camera.position.x -= 1;
+				break;
+			case 40:
+				camera.position.z -= 1;
+				break;
+			case 75: // k
+				camera.position.y += 1;
+				break;
+			case 74: // j
+				camera.position.y -= 1;
+		}
+	};
 
 	// dibujando los elementos scene y camera
 	renderer.render(scene, camera);
