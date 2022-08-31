@@ -106,11 +106,6 @@ scene.background = spaceTexture;
 var stepCone = 0;
 var stepTorus = 0;
 
-function keycontrols(fig){
-	const geometry = fig;
-	
-}
-
 // loop infinito
 function animate() {
 
