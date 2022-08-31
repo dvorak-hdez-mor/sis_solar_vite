@@ -5,12 +5,16 @@ import * as THREE from 'three';
 // importando OrbitControls de examples
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
+import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
+
 // Agregando scene, camera, renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#bg'),
 });
+
+const controls = new PointerLockControls(camera, document.body);
 
 // propiedades de renderer
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -141,7 +145,7 @@ function animate() {
 	controls.update();
 
 	document.onkeydown = function(e){
-		switch(e.keyCode){
+		switch(e.code){
 			case 37: // arrow keys 
 				camera.position.x += 1;
 				break;
