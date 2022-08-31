@@ -27,17 +27,29 @@ camera.position.setX(25);
 //const cone = new THREE.Mesh(geometry, material);
 //scene.add(cone);
 
+// textura cone
+const coneTexture = new THREE.TextureLoader().load('./world.jpg');
+
 // alternativa de agregar cone
 const cone = new THREE.Mesh(
 	new THREE.ConeGeometry(5, 10, 4),
-	new THREE.MeshLambertMaterial({color: 0xff00ff})
+	new THREE.MeshLambertMaterial({
+		//color: 0xff00ff,
+		map: coneTexture
+	})
 );
 cone.receiveShadow = true;
 scene.add(cone);
 
+// cube Texture
+const cubeTexture = new THREE.TextureLoader().load('./sun.jpg');
+
 const cube = new THREE.Mesh(
 	new THREE.BoxGeometry(5, 5, 5),
-	new THREE.MeshMatcapMaterial({color: 0x00ff00})
+	new THREE.MeshMatcapMaterial({
+		//color: 0x00ff00
+		map: cubeTexture
+	})
 );
 //cube.material.transparent = true;
 //cube.material.opacity = 0.5;
@@ -50,6 +62,8 @@ const torusKnot = new THREE.Mesh(
 torusKnot.receiveShadow = true;
 scene.add(torusKnot);
 
+// test capsule
+/*
 const capsule = new THREE.Mesh(
 	new THREE.CapsuleGeometry(2, 5, 2, 8),
 	new THREE.MeshLambertMaterial({color:0xff1906})
@@ -58,6 +72,7 @@ capsule.position.y = 10;
 capsule.position.z = -10;
 capsule.receiveShadow = true;
 scene.add(capsule);
+*/
 
 // agregando luz blanca (0xffffff)
 const pointLight = new THREE.PointLight(0xffffff);
@@ -72,7 +87,7 @@ const ambientLigth = new THREE.AmbientLight(0xffffff);
 // muestra graficamente el objeto deseado
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(50, 10);
-scene.add(lightHelper, gridHelper); // agregando helpers a la scene
+//scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 
 // agregando controles de camera para moverse en la scene c/ratón
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -80,6 +95,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // agregando fondo a la scene
 const spaceTexture = new THREE.TextureLoader().load('./space.jpg');
 scene.background = spaceTexture;
+
+// textura cone
 
 // pasos para movimiento de cone
 var stepCone = 0;
@@ -92,25 +109,28 @@ function animate() {
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
-	cone.rotation.x += 0.1;
-	cone.rotation.y += 0.01;
-	cone.rotation.z += 0.1;
+	//cone.rotation.x += 0.1;
+	cone.rotation.y += 0.1;
+	//cone.rotation.z += 0.1;
 
 	// mover en ciertas condiciones con una func ?
-	camera.position.x = cone.position.x + 5;
-	camera.position.z = cone.position.z + 10;
-	camera.position.y = cone.position.y + 10;
+	camera.position.x = cone.position.x - 10;
+	camera.position.z = cone.position.z - 10;
+	camera.position.y = -5;
+	
+	//camera.position.y = cone.position.y + 10;
 
-	cube.rotation.y += 0.07;
+	cube.rotation.y += 0.05;
 
 	stepCone += 0.01;
 	cone.position.x = 30*Math.sin(stepCone);
 	cone.position.z = 30*Math.cos(stepCone);
 
-	stepTorus += 0.1;
+	stepTorus += 0.08;
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
 
+	// update de controls
 	controls.update();
 
 	// dibujando los elementos scene y camera
