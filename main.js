@@ -5,16 +5,12 @@ import * as THREE from 'three';
 // importando OrbitControls de examples
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
-import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
-
 // Agregando scene, camera, renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#bg'),
 });
-
-const controls = new PointerLockControls(camera, document.body);
 
 // propiedades de renderer
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -134,30 +130,30 @@ function animate() {
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
 
-	keycontrols(cone);
-
 	// update de controls
 	controls.update();
 
 	document.onkeydown = function(e){
 		switch(e.code){
-			case 37: // arrow keys 
+			case "ArrowUp": // arrow keys 
 				camera.position.x += 1;
 				break;
-			case 38:
+			case "ArrowRight":
 				camera.position.z += 1;
 				break;
-			case 39:
+			case "ArrowDown":
 				camera.position.x -= 1;
 				break;
-			case 40:
+			case "ArrowLeft":
 				camera.position.z -= 1;
 				break;
-			case 75: // k
+			case 'KeyV': // k
 				camera.position.y += 1;
+				console.log("test");
 				break;
-			case 74: // j
+			case "KeyC": // j
 				camera.position.y -= 1;
+				break;
 		}
 	};
 
