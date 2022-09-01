@@ -14,7 +14,7 @@ const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#bg'),
 });
 
-const controls = new PointerLockControls(camera, document.body);
+//const controls = new PointerLockControls(camera, document.body);
 
 // propiedades de renderer
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -94,7 +94,8 @@ const gridHelper = new THREE.GridHelper(50, 10);
 scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 
 // agregando controles de camera para moverse en la scene c/ratón
-const controls = new OrbitControls(camera, renderer.domElement);
+//const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new PointerLockControls(camera, document.body);
 
 // agregando fondo a la scene
 const spaceTexture = new THREE.TextureLoader().load('./space.jpg');
@@ -134,13 +135,13 @@ function animate() {
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
 
-	keycontrols(cone);
+	//keycontrols(cone);
 
 	// update de controls
 	controls.update();
 
 	document.onkeydown = function(e){
-		switch(e.code){
+		switch(e.keyCode){
 			case 37: // arrow keys 
 				camera.position.x += 1;
 				break;
