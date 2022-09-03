@@ -8,13 +8,14 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
 
 // Agregando scene, camera, renderer
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+let renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#bg'),
 });
 
-//const controls = new PointerLockControls(camera, document.body);
+let controls = new PointerLockControls(camera, document.body);
+scene.add(controls.getObject());
 
 // propiedades de renderer
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -22,8 +23,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // propiedades de camera
 camera.position.setZ(25);
-camera.position.setY(25);
+camera.position.setY(1);
 camera.position.setX(25);
+//camera.lookAt(scene);
 
 // agregando cone
 //const geometry = new THREE.ConeGeometry(5, 10, 10);
@@ -95,7 +97,7 @@ scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 
 // agregando controles de camera para moverse en la scene c/ratón
 //const controls = new OrbitControls(camera, renderer.domElement);
-const controls = new PointerLockControls(camera, document.body);
+//const controls = new PointerLockControls(camera, document.body);
 
 // agregando fondo a la scene
 const spaceTexture = new THREE.TextureLoader().load('./space.jpg');
@@ -106,6 +108,42 @@ scene.background = spaceTexture;
 // pasos para movimiento de cone
 var stepCone = 0;
 var stepTorus = 0;
+
+var canFly = false;
+var canDown = false;
+var canUp = false;
+
+const onkeydown = function(e){
+	switch(e.code){
+		case 'ArrowUp': // arrow keys 
+			canUp = true;
+			//camera.position.x += 1;
+			break;
+		case 'ArrowDown':
+			canDown = true;
+			//camera.position.z += 1;
+			//controls.moveForward(-0.1);
+			break;
+		case 'Space':
+			canFly = !canFly;
+			//camera.position.x -= 1;
+			break;
+	}
+};
+
+const onkeyup = function(e){
+	switch(e.code){
+		case 'ArrowUp':
+			canUp = false;
+			break;
+		case 'ArrowDown':
+			canDown = false;
+			break;
+	}
+};
+
+document.addEventListener('keydown', onkeydown);
+document.addEventListener('keyup', onkeyup);
 
 // loop infinito
 function animate() {
@@ -138,29 +176,21 @@ function animate() {
 	//keycontrols(cone);
 
 	// update de controls
-	controls.update();
+	//controls.update();
 
-	document.onkeydown = function(e){
-		switch(e.keyCode){
-			case 37: // arrow keys 
-				camera.position.x += 1;
-				break;
-			case 38:
-				camera.position.z += 1;
-				break;
-			case 39:
-				camera.position.x -= 1;
-				break;
-			case 40:
-				camera.position.z -= 1;
-				break;
-			case 75: // k
-				camera.position.y += 1;
-				break;
-			case 74: // j
-				camera.position.y -= 1;
-		}
-	};
+	controls.lock();
+
+	if (canFly){
+		controls.moveForward(0.1);
+	}
+
+	if (canUp){
+		controls.getObject().position.y += 0.08;
+	}
+
+	if (canDown){
+		controls.getObject().position.y -= 0.08;
+	}
 
 	// dibujando los elementos scene y camera
 	renderer.render(scene, camera);
