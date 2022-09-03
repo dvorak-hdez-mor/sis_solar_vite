@@ -3,7 +3,8 @@ import './style.css'
 import * as THREE from 'three';
 
 // importando OrbitControls de examples
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+//import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
 
 // Agregando scene, camera, renderer
 let scene = new THREE.Scene();
