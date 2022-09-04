@@ -36,7 +36,7 @@ camera.position.setX(25);
 //scene.add(cone);
 
 // textura earth
-const earthTexture = new THREE.TextureLoader().load('./world.jpg');
+const earthTexture = new THREE.TextureLoader().load('world.jpg');
 
 // alternativa de agregar sphere
 const earth = new THREE.Mesh(
