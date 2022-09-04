@@ -107,7 +107,7 @@ const ambientLigth = new THREE.AmbientLight(0xffffff);
 // muestra graficamente el objeto deseado
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(50, 10);
-scene.add(lightHelper, gridHelper); // agregando helpers a la scene
+//scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 
 // agregando controles de camera para moverse en la scene c/ratón
 //const controls = new OrbitControls(camera, renderer.domElement);
