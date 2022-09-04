@@ -6,6 +6,9 @@ import * as THREE from 'three';
 //import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
 
+// libreria para cargar modelos 3D en formato glb
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
+
 // Agregando scene, camera, renderer
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -37,7 +40,7 @@ const coneTexture = new THREE.TextureLoader().load('./world.jpg');
 
 // alternativa de agregar cone
 const cone = new THREE.Mesh(
-	new THREE.ConeGeometry(5, 10, 4),
+	new THREE.ConeGeometry(5, 10, 10),
 	new THREE.MeshLambertMaterial({
 		//color: 0xff00ff,
 		map: coneTexture
@@ -46,11 +49,23 @@ const cone = new THREE.Mesh(
 cone.receiveShadow = true;
 scene.add(cone);
 
+// add blackhole
+let blackhole;
+let blackholeLoader = new GLTFLoader();
+blackholeLoader.load('a_black_hole.glb', function (gltf) {
+	//scene.add(gltf.scene);
+	blackhole = gltf.scene;
+	blackhole.scale.set(10, 10, 10);
+	scene.add(blackhole);
+}, undefined, function (error){
+	console.log('No se cargó el modelo 3D');
+});
+
 // cube Texture
 const cubeTexture = new THREE.TextureLoader().load('./sun.jpg');
 
 const cube = new THREE.Mesh(
-	new THREE.BoxGeometry(5, 5, 5),
+	new THREE.BoxGeometry(30, 30, 30),
 	new THREE.MeshMatcapMaterial({
 		//color: 0x00ff00
 		map: cubeTexture
@@ -58,7 +73,7 @@ const cube = new THREE.Mesh(
 );
 //cube.material.transparent = true;
 //cube.material.opacity = 0.5;
-scene.add(cube);
+//scene.add(cube);
 
 const torusKnot = new THREE.Mesh(
 	new THREE.TorusKnotGeometry(2, 0.5, 20, 5),
@@ -99,8 +114,22 @@ scene.add(lightHelper, gridHelper); // agregando helpers a la scene
 //const controls = new PointerLockControls(camera, document.body);
 
 // agregando fondo a la scene
-const spaceTexture = new THREE.TextureLoader().load('./space.jpg');
+/*
+const spaceTexture = new THREE.TextureLoader().load('space.jpg');
+spaceTexture.wrapS = THREE.RepeatWrapping;
+spaceTexture.wrapT = THREE.RepeatWrapping;
+spaceTexture.repeat.set(4, 4)
 scene.background = spaceTexture;
+*/
+// fondo espacial
+const bgScene = new THREE.Mesh(
+	new THREE.SphereGeometry(320, 20, 20),
+	new THREE.MeshBasicMaterial({
+		map: (new THREE.TextureLoader).load('space.jpg'),
+		side: THREE.DoubleSide
+	})
+);
+scene.add(bgScene);
 
 // textura cone
 
@@ -162,11 +191,13 @@ function animate() {
 	
 	//camera.position.y = cone.position.y + 10;
 
-	cube.rotation.y += 0.05;
+	//cube.rotation.y += 0.05;
+	//loader.rotation.y += 0.05;
+	blackhole.rotation.y += 0.05;
 
 	stepCone += 0.01;
-	cone.position.x = 30*Math.sin(stepCone);
-	cone.position.z = 30*Math.cos(stepCone);
+	cone.position.x = 60*Math.sin(stepCone);
+	cone.position.z = 60*Math.cos(stepCone);
 
 	stepTorus += 0.08;
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
