@@ -35,19 +35,19 @@ camera.position.setX(25);
 //const cone = new THREE.Mesh(geometry, material);
 //scene.add(cone);
 
-// textura cone
-const coneTexture = new THREE.TextureLoader().load('./world.jpg');
+// textura earth
+const earthTexture = new THREE.TextureLoader().load('./world.jpg');
 
-// alternativa de agregar cone
-const cone = new THREE.Mesh(
-	new THREE.ConeGeometry(5, 10, 10),
+// alternativa de agregar sphere
+const earth = new THREE.Mesh(
+	new THREE.SphereGeometry(5, 15, 15),
 	new THREE.MeshLambertMaterial({
 		//color: 0xff00ff,
-		map: coneTexture
+		map: earthTexture
 	})
 );
-cone.receiveShadow = true;
-scene.add(cone);
+earth.receiveShadow = true;
+scene.add(earth);
 
 // add blackhole
 let blackhole;
@@ -144,7 +144,7 @@ stay.play();
 // textura cone
 
 // pasos para movimiento de cone
-var stepCone = 0;
+var stepEarth = 0;
 var stepTorus = 0;
 
 var canFly = false;
@@ -168,7 +168,7 @@ const onkeydown = function(e){
 			//camera.position.x -= 1;
 			break;
 		case 'KeyM':
-			animation = (animation < 4)?animation + 1 : 0;
+			animation = (animation < 5)?animation + 1 : 0;
 			//animation = !animation;
 	}
 };
@@ -195,15 +195,15 @@ function animate() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
 	//cone.rotation.x += 0.1;
-	cone.rotation.y += 0.1;
+	earth.rotation.y += 0.1;
 	//cone.rotation.z += 0.1;
 
 	// mover en ciertas condiciones con una func ?
 	switch (animation){
 		case 0:
 			// siga a la tierra
-			camera.position.x = 60*Math.sin(stepCone)+20;
-			camera.position.z = 60*Math.cos(stepCone)+20;
+			camera.position.x = 60*Math.sin(stepEarth)+20;
+			camera.position.z = 60*Math.cos(stepEarth)+20;
 			camera.position.y = 5;
 			camera.lookAt(0,0,0);
 			break;
@@ -225,7 +225,14 @@ function animate() {
 			camera.position.x = 53;
 			camera.position.z = 0;
 			camera.position.y = 5;
-			camera.lookAt(cone.position);
+			camera.lookAt(earth.position);
+			break;
+		case 4:
+			camera.position.x = 75*Math.sin(stepEarth+0.6);
+			camera.position.z = 75*Math.cos(stepEarth+0.6);
+			camera.position.y = 10;
+			camera.lookAt(earth.position);
+			break;
 	}
 		//camera.position.y = cone.position.y + 10;
 
@@ -233,13 +240,13 @@ function animate() {
 	//loader.rotation.y += 0.05;
 	blackhole.rotation.y += 0.05;
 
-	stepCone += 0.01;
-	cone.position.x = 60*Math.sin(stepCone);
-	cone.position.z = 60*Math.cos(stepCone);
+	stepEarth += 0.01;
+	earth.position.x = 60*Math.sin(stepEarth);
+	earth.position.z = 60*Math.cos(stepEarth);
 
 	stepTorus += 0.08;
-	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
-	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
+	torusKnot.position.x = earth.position.x-10*Math.sin(stepTorus);
+	torusKnot.position.z = earth.position.z-10*Math.cos(stepTorus);
 	torusKnot.rotation.y -= 0.08;
 
 	//keycontrols(cone);
