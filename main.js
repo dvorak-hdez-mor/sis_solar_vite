@@ -131,6 +131,16 @@ const bgScene = new THREE.Mesh(
 );
 scene.add(bgScene);
 
+// agregando un listener a la camera
+const listener = new THREE.AudioListener();
+camera.add(listener);
+
+const sound1 = new THREE.Audio(listener);
+const stay = document.getElementById('stay');
+sound1.setMediaElementSource(stay);
+sound1.setVolume(0.5);
+stay.play();
+
 // textura cone
 
 // pasos para movimiento de cone
@@ -140,6 +150,7 @@ var stepTorus = 0;
 var canFly = false;
 var canDown = false;
 var canUp = false;
+var animation = 0;
 
 const onkeydown = function(e){
 	switch(e.code){
@@ -156,6 +167,9 @@ const onkeydown = function(e){
 			canFly = !canFly;
 			//camera.position.x -= 1;
 			break;
+		case 'KeyM':
+			animation = (animation < 4)?animation + 1 : 0;
+			//animation = !animation;
 	}
 };
 
@@ -185,11 +199,35 @@ function animate() {
 	//cone.rotation.z += 0.1;
 
 	// mover en ciertas condiciones con una func ?
-	//camera.position.x = cone.position.x - 10;
-	//camera.position.z = cone.position.z - 10;
-	//camera.position.y = -5;
-	
-	//camera.position.y = cone.position.y + 10;
+	switch (animation){
+		case 0:
+			// siga a la tierra
+			camera.position.x = 60*Math.sin(stepCone)+20;
+			camera.position.z = 60*Math.cos(stepCone)+20;
+			camera.position.y = 5;
+			camera.lookAt(0,0,0);
+			break;
+		case 1:
+			// vista superior
+			camera.position.x = 0;
+			camera.position.z = 0;
+			camera.position.y = 60;
+			camera.lookAt(0, 0, 0);
+			break;
+		case 2:
+			// vista lateral
+			camera.position.x = 80;
+			camera.position.z = 0;
+			camera.position.y = 5;
+			camera.lookAt(0, 0, 0);
+			break;
+		case 3:
+			camera.position.x = 53;
+			camera.position.z = 0;
+			camera.position.y = 5;
+			camera.lookAt(cone.position);
+	}
+		//camera.position.y = cone.position.y + 10;
 
 	//cube.rotation.y += 0.05;
 	//loader.rotation.y += 0.05;
@@ -202,6 +240,7 @@ function animate() {
 	stepTorus += 0.08;
 	torusKnot.position.x = cone.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = cone.position.z-10*Math.cos(stepTorus);
+	torusKnot.rotation.y -= 0.08;
 
 	//keycontrols(cone);
 
