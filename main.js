@@ -1,19 +1,19 @@
-// declaracion de variables globales
+// Global variables
 
 import './style.css'
 
 import * as THREE from 'three';
 
-// importando OrbitControls de examples
+// import OrbitControls
 //import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 //
 import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
 
-// libreria para cargar modelos 3D en formato glb
+// import 3D loader library 
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 
-// Agregando scene, camera, renderer
+// add scene, camera, renderer
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
 let renderer = new THREE.WebGLRenderer({
@@ -23,19 +23,19 @@ let renderer = new THREE.WebGLRenderer({
 let controls = new PointerLockControls(camera, document.body);
 scene.add(controls.getObject());
 
-// propiedades de renderer
+// renderer properties
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// propiedades de camera
+// camera properties
 camera.position.setZ(25);
 camera.position.setY(1);
 camera.position.setX(25);
 
-// textura earth
+// earth texture
 const earthTexture = new THREE.TextureLoader().load('world.jpg');
 
-// agregando earth
+// add earth
 const earth = new THREE.Mesh(
 	new THREE.SphereGeometry(5, 15, 15),
 	new THREE.MeshLambertMaterial({
@@ -46,7 +46,7 @@ const earth = new THREE.Mesh(
 earth.receiveShadow = true;
 scene.add(earth);
 
-// agregando modelo 3D blackhole
+// add black hole 3D model
 let blackhole;
 let blackholeLoader = new GLTFLoader();
 blackholeLoader.load('a_black_hole.glb', function (gltf) {
@@ -59,21 +59,7 @@ blackholeLoader.load('a_black_hole.glb', function (gltf) {
 	console.log(error);
 });
 
-/*
-// textura sol
-const cubeTexture = new THREE.TextureLoader().load('./sun.jpg');
-
-// objeto sol
-const cube = new THREE.Mesh(
-	new THREE.BoxGeometry(30, 30, 30),
-	new THREE.MeshMatcapMaterial({
-		//color: 0x00ff00
-		map: cubeTexture
-	})
-);
-*/
-
-// agregando luna
+// add moon
 const torusKnot = new THREE.Mesh(
 	new THREE.TorusKnotGeometry(2, 0.5, 20, 5),
 	new THREE.MeshLambertMaterial({color: 0xf0f0f0})
@@ -81,23 +67,22 @@ const torusKnot = new THREE.Mesh(
 torusKnot.receiveShadow = true;
 scene.add(torusKnot);
 
-// agregando luz blanca central
+// add pointLight
 const pointLight = new THREE.PointLight(0xffffff);
 scene.add(pointLight);
 
 //const ambientLigth = new THREE.AmbientLight(0xffffff);
-//scene.add(pointLight, ambientLigth); // agregando dos objetos a la vez
+//scene.add(pointLight, ambientLigth); // add two objects at same time
 
-// creando helpers para debugging
-// muestra graficamente el objeto deseado
+// debugging
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(50, 10);
 //scene.add(lightHelper, gridHelper); // agregando helpers a scene
 
-// agregando controles de camera para moverse en la scene
+// add camera controls
 //const controls = new OrbitControls(camera, renderer.domElement);
 
-// agregando fondo a la scene
+// add background
 /*
 const spaceTexture = new THREE.TextureLoader().load('space.jpg');
 spaceTexture.wrapS = THREE.RepeatWrapping;
@@ -106,7 +91,7 @@ spaceTexture.repeat.set(4, 4)
 scene.background = spaceTexture;
 */
 
-// fondo dinamico
+// dynamic background
 const bgScene = new THREE.Mesh(
 	new THREE.SphereGeometry(320, 20, 20),
 	new THREE.MeshBasicMaterial({
@@ -116,7 +101,7 @@ const bgScene = new THREE.Mesh(
 );
 scene.add(bgScene);
 
-// agregando un listener a la camera (para escuchar musica)
+// add camera listener
 const listener = new THREE.AudioListener();
 camera.add(listener);
 
@@ -126,11 +111,11 @@ sound1.setMediaElementSource(stay);
 sound1.setVolume(0.5);
 stay.play();
 
-// pasos para movimiento de los cuerpos celestes
+// movement properties
 var stepEarth = 0;
 var stepTorus = 0;
 
-// atributos de modo de vuelo
+// "flying mode" properties
 var canFly = false;
 var canDown = false;
 var canUp = false;
@@ -171,53 +156,53 @@ const onkeyup = function(e){
 document.addEventListener('keydown', onkeydown);
 document.addEventListener('keyup', onkeyup);
 
-// cuando detecte click del raton, bloquear controles
+// block mouse when click event
 document.addEventListener('click', function(){
 	controls.lock();
 });
 
-// loop infinito
+// loop
 function animate() {
 
 	requestAnimationFrame(animate);
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
-	// rotacion de la tierra
+	// Earth rotation
 	earth.rotation.y += 0.1;
 
-	// Movimientos de camara dependiendo del modo
+	// camera modes
 	switch (mode){
 		case 0:
-			// rotando alrededor de la tierra
+			// rotate around the earth
 			camera.position.x = 60*Math.sin(stepEarth)+20;
 			camera.position.z = 60*Math.cos(stepEarth)+20;
 			camera.position.y = 5;
 			camera.lookAt(0, 0, 0);
 			break;
 		case 1:
-			// vista superior
+			// top view
 			camera.position.x = 0;
 			camera.position.z = 0;
 			camera.position.y = 60;
 			camera.lookAt(0, 0, 0);
 			break;
 		case 2:
-			// vista lateral
+			// lateral view
 			camera.position.x = 80;
 			camera.position.z = 0;
 			camera.position.y = 5;
 			camera.lookAt(0, 0, 0);
 			break;
 		case 3:
-			// vista hacia la tierra
+			// to earth view
 			camera.position.x = 53;
 			camera.position.z = 0;
 			camera.position.y = 5;
 			camera.lookAt(earth.position);
 			break;
 		case 4:
-			// siguiendo a la tierra en la misma orbita solar
+			// following the earth in the same orbital line
 			camera.position.x = 75*Math.sin(stepEarth+0.6);
 			camera.position.z = 75*Math.cos(stepEarth+0.6);
 			camera.position.y = 10;
@@ -225,24 +210,22 @@ function animate() {
 			break;
 	}
 
-	// Rotación del blackhole
+	// black hole rotation
 	blackhole.rotation.y += 0.05;
 
-	// Movimiento de la tierra
+	// Earth movement
 	stepEarth += 0.01;
 	earth.position.x = 60*Math.sin(stepEarth);
 	earth.position.z = 60*Math.cos(stepEarth);
 
-	// Movimiento de la luna
+	// moon movement
 	stepTorus += 0.08;
 	torusKnot.position.x = earth.position.x-10*Math.sin(stepTorus);
 	torusKnot.position.z = earth.position.z-10*Math.cos(stepTorus);
 	torusKnot.rotation.y -= 0.08;
 
-	// update de controls
 	//controls.update();
 
-	//(lockC)?controls.lock():0;
 	if (controls.isLocked === true){
 		controls.lock();
 	}
@@ -259,7 +242,7 @@ function animate() {
 		controls.getObject().position.y -= 0.1;
 	}
 
-	// dibujando los elementos scene y camera
+	// rendering scene and camera
 	renderer.render(scene, camera);
 }
 
