@@ -1,5 +1,7 @@
 # black-hole-simulation
 
+Interact with my project [here](https://miguehm.github.io/black-hole-simulation/).
+
 A non-scientific simulation about black hole system. My first steps using `threejs` library.
 
 ![](https://user-images.githubusercontent.com/80235345/222919164-a79d5ffe-a816-4566-b618-2c091d3d4ca5.png)
